@@ -13,6 +13,11 @@ public abstract class Gradebook implements Gradeable, Instructable {
     StudentRecord[] sturec;
     Gradebook(){}
     Gradebook(String fname) {
+    	readFileAndSerielize(fname);
+    }
+
+    private void readFileAndSerielize(String fname) {
+    	
         //a. read the file and build a student array.
         Student labtmp[] = new Student[40];
         FileIO fileIO = new FileIO();
@@ -57,9 +62,9 @@ public abstract class Gradebook implements Gradeable, Instructable {
                 }
             }
         }
-
+    	
+    	
     }
-
     public void printstats(int studid) {
         //deserialize any file and print stats.
         ObjectInputStream in = null;
@@ -96,12 +101,9 @@ public abstract class Gradebook implements Gradeable, Instructable {
     }
 
     @Override
-    public void MakeGradeBook(String coursename, String filename) {
-        if (coursename.equals("CHEM1A")){
-            sturec=new CHEM1A(filename).sturec;
-        }else if (coursename.equals("CIS35a")){
-            sturec=new CIS35a(filename).sturec;
-        }
+    public void MakeGradeBook(String filename) {
+    	//Make Gradebook According to desired Subject
+    	readFileAndSerielize(filename);
     }
 
     @Override
