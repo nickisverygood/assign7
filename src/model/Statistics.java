@@ -9,7 +9,6 @@ public class Statistics implements Serializable
 
 {
     final int numberofquizzes = 5;
-    private int numberOfStudents;
     private int[] lowscores = new int[numberofquizzes];
     private int[] highscores = new int[numberofquizzes];
     private float[] avgscores = new float[numberofquizzes];
@@ -57,7 +56,6 @@ public class Statistics implements Serializable
     }
 
     public void calculateStatistics(Student[] a) {
-    	numberOfStudents = a.length;
         findlow(a);
         findhigh(a);
         findavg(a);
@@ -81,7 +79,6 @@ public class Statistics implements Serializable
 
     public void print() {
         if (operatorANDtoArray(statisticsCheckList)) {
-        	System.out.print("\nNumber Of Students: "+numberOfStudents);
             System.out.print("\nHigh Score ");
             for (int i = 0; i < numberofquizzes; i++) {
                 System.out.print(highscores[i] + " ");

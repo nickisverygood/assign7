@@ -106,40 +106,65 @@ public abstract class Gradebook implements Gradeable, Instructable {
 
     @Override
     public void printall() {
-        for (int i=0;i<sturec.length;i++){
-            sturec[i].thisstudent.printScore();
-        }
-    }
-
-    @Override
-    public void printstats() {
-        sturec[0].thisstatistics.print();
-    }
-
-    @Override
-    public void printgrades() {
-        for (int i=0;i<sturec.length;i++){
-            System.out.print("\nStudent ID: " + sturec[i].thisstudent.getSID() + "\n");
-            for(int j=0;j<sturec[i].thisstudent.getScores().length;j++){
-                int score = sturec[i].thisstudent.getScores()[j];
-                System.out.print("Quiz " + (i + 1) + ": ");
-                if(score>=97)System.out.print("A+");
-                else if(score>=93)System.out.print("A");
-                else if(score>=90)System.out.print("A-");
-                else if(score>=87)System.out.print("B+");
-                else if(score>=83)System.out.print("B");
-                else if(score>=80)System.out.print("B-");
-                else if(score>=77)System.out.print("C+");
-                else if(score>=73)System.out.print("C");
-                else if(score>=70)System.out.print("D+");
-                else if(score>=63)System.out.print("D");
-                else if(score>=60)System.out.print("D-");
-                else System.out.print("F");
-                System.out.print("\n");
-
+        ObjectInputStream in = null;
+        File curDir = new File(".");
+        File[] filesList = curDir.listFiles();
+        for(File f : filesList){
+            if(f.isDirectory());
+            if(f.isFile()){
+                if(f.getName().substring(f.getName().lastIndexOf('.')+1).equals("dat")){
+                    printgrades(Integer.valueOf(f.getName().replaceFirst("[.][^.]+$", "")));
+                }
             }
-
         }
     }
+
+    public String convert2grade(double score){
+        if(score>=97) return ("A+");
+        else if(score>=93) return ("A");
+        else if(score>=90) return ("A-");
+        else if(score>=87) return ("B+");
+        else if(score>=83) return ("B");
+        else if(score>=80) return ("B-");
+        else if(score>=77) return ("C+");
+        else if(score>=73) return ("C");
+        else if(score>=70) return ("D+");
+        else if(score>=63) return ("D");
+        else if(score>=60) return ("D-");
+        else  return ("F");
+    }
+
+    private double average(int[] data) {
+        int sum = 0;
+
+        for(int i=0; i < data.length; i++) sum = sum + data[i];
+        double average = sum / data.length;;
+        return average;
+    }
+
+    @Override
+    public void printgrades(int studid) {
+        ObjectInputStream in = null;
+        try {
+            //deserialize studid.dat or studid.ser
+            in = new ObjectInputStream(new FileInputStream(studid + ".dat"));
+            StudentRecord b1 = (StudentRecord) in.readObject();
+
+            System.out.print("\nStudent ID: " + studid + "\n");
+            for(int j=0;j<b1.thisstudent.getScores().length;j++){
+                int score = b1.thisstudent.getScores()[j];
+                System.out.print("Quiz " + (j + 1) + ": ");
+                System.out.print(convert2grade(score));
+                System.out.print("\n");
+            }
+            System.out.print("Overall: "+convert2grade(average(b1.thisstudent.getScores())));
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+
+        }
 }
 
